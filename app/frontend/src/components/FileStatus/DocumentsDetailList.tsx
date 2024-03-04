@@ -2,10 +2,12 @@
 // Licensed under the MIT license.
 
 import { useState } from "react";
-import { DetailsList, DetailsListLayoutMode, SelectionMode, IColumn, Selection, Label, BaseSelectedItemsList } from "@fluentui/react";
+import { DetailsList, DetailsListLayoutMode, SelectionMode, IColumn, Selection, Label, BaseSelectedItemsList, Panel, DefaultButton } from "@fluentui/react";
 import { TooltipHost } from '@fluentui/react';
 
 import styles from "./DocumentsDetailList.module.css";
+import { StatusContent } from "../StatusContent";
+import { any } from "prop-types";
 
 export interface IDocument {
     key: string;
@@ -22,10 +24,13 @@ export interface IDocument {
 interface Props {
     items: IDocument[];
     onFilesSorted?: (items: IDocument[]) => void;
+    itemPanel?: any;
 }
 
 export const DocumentsDetailList = ({ items, onFilesSorted}: Props) => {
-
+    
+    const [isStatusPanelOpen, setIsStatusPanelOpen] = useState(false);
+    const [value, setValue] = useState('Initial value');
     const onColumnClick = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
         const newColumns: IColumn[] = columns.slice();
         const currColumn: IColumn = newColumns.filter(currCol => column.key === currCol.key)[0];
@@ -53,10 +58,24 @@ export const DocumentsDetailList = ({ items, onFilesSorted}: Props) => {
         return item.key;
     }
 
+    // function setItem(item: any): void {
+    //     itemPanel = item;
+    // }
+    // function getItem(): any {
+    //     return itemPanel;
+    // }
+
     function onItemInvoked(item: any): void {
-        alert(`Item invoked: ${item.name}`);
+        
+        refreshProp(item);
+        setIsStatusPanelOpen(true);
+
+        // alert(`Item invoked: ${item.name}`);
     }
 
+    const refreshProp = (item: any) => {
+        setValue(item);
+      };
     const [columns, setColumns] = useState<IColumn[]> ([
         {
             key: 'column1',
@@ -158,6 +177,19 @@ export const DocumentsDetailList = ({ items, onFilesSorted}: Props) => {
                 isHeaderVisible={true}
                 onItemInvoked={onItemInvoked}
             />
+          <Panel
+                headerText="Status Log"
+                isOpen={isStatusPanelOpen}
+                isBlocking={false}
+                onDismiss={() => setIsStatusPanelOpen(false)}
+                closeButtonAriaLabel="Close"
+                onRenderFooterContent={() => <DefaultButton onClick={() => setIsStatusPanelOpen(false)}>Close</DefaultButton>}
+                isFooterAtBottom={true}
+            >
+                <div className={styles.resultspanel}>
+                    <StatusContent item={value} />
+                </div>
+            </Panel>  
             <span className={styles.footer}>{"(" + items.length as string + ") records."}</span>
         </div>
     );

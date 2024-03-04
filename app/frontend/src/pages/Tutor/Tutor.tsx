@@ -11,7 +11,7 @@ import { TagPickerInline } from "../../components/TagPicker/TagPicker"
 import { FolderPicker } from '../../components/FolderPicker/FolderPicker';
 import { StatusContent } from "../../components/StatusContent/StatusContent";
 
-import styles from "./Content.module.css";
+import styles from "./Tutor.module.css";
 
 export interface IButtonExampleProps {
     // These are set based on the toggles shown above the examples (not needed in real code)
@@ -19,7 +19,7 @@ export interface IButtonExampleProps {
     checked?: boolean;
   }
 
-const Content = () => {
+const Tutor = () => {
     const [isStatusPanelOpen, setIsStatusPanelOpen] = useState(false);
     const [selectedKey, setSelectedKey] = useState<string | undefined>(undefined);
     const [selectedTags, setSelectedTags] = useState<string[] | undefined>(undefined);
@@ -38,20 +38,9 @@ const Content = () => {
 
     return (
         <div className={styles.contentArea} >
-            <Pivot aria-label="Upload Files Section" className={styles.topPivot} onLinkClick={handleLinkClick}>
-                <PivotItem headerText="Upload Files" aria-label="Upload Files Tab">
-                    <div className={styles.App} >
-                        <FolderPicker allowFolderCreation={true} onSelectedKeyChange={onSelectedKeyChanged}/>
-                        <TagPickerInline allowNewTags={true} onSelectedTagsChange={onSelectedTagsChanged}/>
-                        <FilePicker folderPath={selectedKey || ""} tags={selectedTags || []}/>
-                    </div>
-                </PivotItem>
-                <PivotItem headerText="Upload Status" aria-label="Upload Status Tab">
-                    <FileStatus className=""/>
-                </PivotItem>
-            </Pivot>
+            
         </div>
     );
 };
     
-export default Content;
+export default Tutor;
