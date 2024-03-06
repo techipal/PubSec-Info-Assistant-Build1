@@ -72,8 +72,12 @@ def main(msg: func.QueueMessage) -> None:
         
         message_body = msg.get_body().decode("utf-8")
         message_json = json.loads(message_body)
-        blob_path = message_json["blob_name"]       
-   
+        
+        if message_json["file_class"] == "json":
+            blob_path = message_json["KnowledgeBaseLink"]
+        else:
+            blob_path = message_json["blob_name"]       
+        
         logging.info(
             "Python queue trigger function processed a queue item: %s",
             msg.get_body().decode("utf-8"),
